@@ -8,6 +8,7 @@ import VacancyForm, {
   formToPayload,
   type VacancyFormValues,
 } from "@/components/VacancyForm";
+import HeroPhoto from "@/components/HeroPhoto";
 
 // Perusahaan default dari seeder (Dicoding Indonesia)
 const DEFAULT_COMPANY_ID = 1;
@@ -27,11 +28,16 @@ export default function NewVacancyPage() {
 
   return (
     <>
-      <section className="bg-neutral-900 py-10 text-white">
+        <section className="bg-neutral-900 py-14 text-white">
         <div className="mx-auto max-w-5xl px-6">
-          <h1 className="text-2xl font-bold">Buat lowongan pekerjaan</h1>
-          <p className="mt-2 text-sm text-gray-300">
+          <h1 className="text-3xl font-bold leading-tight">
+            Buat lowongan pekerjaan{" "}
+            <HeroPhoto className="ml-2 h-10 w-36" />
+          </h1>
+          <p className="mt-3 text-sm leading-relaxed text-white">
             Dicoding Jobs menghubungkan industri dengan talenta yang tepat.
+            <br />
+            Mencari tim baru tidak harus melelahkan dan boros biaya.
           </p>
         </div>
       </section>

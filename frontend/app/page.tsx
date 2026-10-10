@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getVacancies } from "@/lib/api";
 import JobCard from "@/components/JobCard";
+import HeroPhoto from "@/components/HeroPhoto";
 
 export default function HomePage() {
   const [search, setSearch] = useState("");
@@ -27,7 +28,8 @@ export default function HomePage() {
           <h1 className="mt-2 text-3xl font-bold leading-tight sm:text-4xl">
             Temukan lowongan yang
             <br />
-            cocok untuk kamu
+            cocok untuk kamu{" "}
+            <HeroPhoto className="ml-2 h-10 w-36 sm:h-12 sm:w-40" />
           </h1>
         </div>
       </section>

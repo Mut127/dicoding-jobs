@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Briefcase, Clock, Pencil, Trash2, Upload } from "lucide-react";
 import { deleteVacancy, getVacancies } from "@/lib/api";
 import { formatDate } from "@/lib/format";
 
@@ -27,8 +29,9 @@ export default function DashboardPage() {
   return (
     <div className="mx-auto flex max-w-5xl gap-8 px-6 py-8">
       <aside className="hidden w-52 shrink-0 sm:block">
-        <p className="mb-4 text-xl font-semibold text-slate-700">Jobs</p>
-        <div className="rounded bg-gray-100 px-3 py-2 text-sm font-medium">
+        <Image src="/images/sidebar_icon.svg" alt="Jobs" width={500} height={100} unoptimized className="ml-3 block h-auto w-[500px]" />
+        <div className="flex items-center gap-2 rounded bg-gray-100 px-3 py-2 text-sm font-medium">
+          <Briefcase size={16} />
           Lowongan Saya
         </div>
       </aside>
@@ -45,9 +48,7 @@ export default function DashboardPage() {
         </div>
 
         {isLoading && <p className="text-sm text-gray-500">Memuat lowongan...</p>}
-        {isError && (
-          <p className="text-sm text-red-600">Gagal memuat lowongan.</p>
-        )}
+        {isError && <p className="text-sm text-red-600">Gagal memuat lowongan.</p>}
         {data && data.length === 0 && (
           <p className="text-sm text-gray-500">Belum ada lowongan.</p>
         )}
@@ -59,9 +60,14 @@ export default function DashboardPage() {
               data-testid="dashboard-item"
               className="flex items-start gap-4 rounded-md border border-gray-200 p-4"
             >
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded bg-slate-700 font-bold text-white">
-                g
-              </div>
+              <Image
+                src="/images/dashboard_card_icon.svg"
+                alt="Dicoding"
+                width={48}
+                height={48}
+                unoptimized
+                className="shrink-0 rounded"
+              />
               <div className="flex-1">
                 <Link
                   href={`/vacancies/${vacancy.id}`}
@@ -69,23 +75,33 @@ export default function DashboardPage() {
                 >
                   {vacancy.title}
                 </Link>
-                <p className="mt-1 text-xs text-gray-500">
-                  Dibuat: {formatDate(vacancy.created_at)} · Aktif hingga:{" "}
-                  {formatDate(vacancy.active_until)}
-                </p>
+
+                <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500">
+                  <span className="flex items-center gap-1">
+                    <Upload size={13} />
+                    Dibuat: {formatDate(vacancy.created_at)}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Clock size={13} />
+                    Aktif hingga: {formatDate(vacancy.active_until)}
+                  </span>
+                </div>
+
                 <div className="mt-3 flex gap-2">
                   <Link
                     href={`/vacancies/${vacancy.id}/edit`}
-                    className="rounded border border-gray-300 px-3 py-1 text-xs hover:bg-gray-50"
+                    className="flex items-center gap-1.5 rounded border border-gray-300 px-3 py-1 text-xs hover:bg-gray-50"
                   >
+                    <Pencil size={13} />
                     Edit
                   </Link>
                   <button
                     type="button"
                     onClick={() => handleDelete(vacancy.id, vacancy.title)}
                     disabled={deleteMutation.isPending}
-                    className="rounded bg-red-100 px-3 py-1 text-xs text-red-700 hover:bg-red-200 disabled:opacity-60"
+                    className="flex items-center gap-1.5 rounded bg-red-100 px-3 py-1 text-xs text-red-700 hover:bg-red-200 disabled:opacity-60"
                   >
+                    <Trash2 size={13} />
                     Hapus
                   </button>
                 </div>

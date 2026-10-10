@@ -5,6 +5,8 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { ApiError, getVacancy } from "@/lib/api";
 import { employmentTypeLabels, experienceLabels } from "@/lib/format";
+import Image from "next/image";
+import { Building2, MapPin, Users } from "lucide-react";
 
 export default function VacancyDetail() {
   const { id } = useParams<{ id: string }>();
@@ -37,11 +39,16 @@ export default function VacancyDetail() {
 
   return (
     <article>
-      <section className="border-b border-gray-200">
+            <section className="border-b border-gray-200">
         <div className="mx-auto flex max-w-3xl items-center gap-5 px-6 py-8">
-          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded bg-slate-700 text-sm font-bold text-white">
-            dicoding
-          </div>
+          <Image
+            src="/images/icon_vacancy.svg"
+            alt="Dicoding"
+            width={80}
+            height={80}
+            unoptimized
+            className="shrink-0 rounded"
+          />
           <div>
             <h1 className="text-xl font-bold" data-testid="vacancy-title">
               {vacancy.title}
@@ -49,10 +56,21 @@ export default function VacancyDetail() {
             <p className="mt-1 text-xs text-gray-500">
               Sektor Bisnis: {vacancy.company?.business_sector}
             </p>
-            <p className="mt-1 text-xs text-gray-600">
-              {vacancy.company?.name} · {vacancy.location}
-              {vacancy.is_remote ? " (Remote)" : ""} · {vacancy.company?.employee_range} Karyawan
-            </p>
+            <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-600">
+              <span className="flex items-center gap-1">
+                <Building2 size={14} />
+                <span className="text-blue-600 underline">{vacancy.company?.name}</span>
+              </span>
+              <span className="flex items-center gap-1">
+                <MapPin size={14} />
+                {vacancy.location}
+                {vacancy.is_remote ? " (Remote)" : ""}
+              </span>
+              <span className="flex items-center gap-1">
+                <Users size={14} />
+                {vacancy.company?.employee_range} Karyawan
+              </span>
+            </div>
           </div>
         </div>
       </section>
