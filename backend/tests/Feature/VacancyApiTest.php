@@ -86,4 +86,46 @@ class VacancyApiTest extends TestCase
     {
         $this->getJson('/api/vacancies/9999')->assertNotFound();
     }
+
+        public function test_can_update_vacancy(): void
+    {
+        $vacancy = Vacancy::factory()->create(['title' => 'Old Title']);
+
+        $this->putJson("/api/vacancies/{$vacancy->id}", $this->validPayload([
+            'company_id' => $vacancy->company_id,
+            'title' => 'New Title',
+        ]))
+            ->assertOk()
+            ->assertJsonPath('data.title', 'New Title');
+
+        $this->assertDatabaseHas('vacancies', ['id' => $vacancy->id, 'title' => 'New Title']);
+    }
+
+    public function test_update_vacancy_validates_input(): void
+    {
+        $vacancy = Vacancy::factory()->create();
+
+        $this->putJson("/api/vacancies/{$vacancy->id}", $this->validPayload(['title' => null]))
+            ->assertUnprocessable()
+            ->assertJsonValidationErrors('title');
+    }
+
+    public function test_update_returns_404_when_not_found(): void
+    {
+        $this->putJson('/api/vacancies/9999', $this->validPayload())->assertNotFound();
+    }
+
+    public function test_can_delete_vacancy(): void
+    {
+        $vacancy = Vacancy::factory()->create();
+
+        $this->deleteJson("/api/vacancies/{$vacancy->id}")->assertNoContent();
+
+        $this->assertDatabaseMissing('vacancies', ['id' => $vacancy->id]);
+    }
+
+    public function test_delete_returns_404_when_not_found(): void
+    {
+        $this->deleteJson('/api/vacancies/9999')->assertNotFound();
+    }
 }

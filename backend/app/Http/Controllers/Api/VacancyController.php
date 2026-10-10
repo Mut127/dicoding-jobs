@@ -7,6 +7,7 @@ use App\Http\Requests\StoreVacancyRequest;
 use App\Http\Resources\VacancyResource;
 use App\Models\Vacancy;
 use Illuminate\Http\Request;
+use App\Http\Requests\UpdateVacancyRequest;
 
 class VacancyController extends Controller
 {
@@ -30,5 +31,19 @@ class VacancyController extends Controller
     public function show(Vacancy $vacancy)
     {
         return new VacancyResource($vacancy->load('company'));
+    }
+
+        public function update(UpdateVacancyRequest $request, Vacancy $vacancy)
+    {
+        $vacancy->update($request->validated());
+
+        return new VacancyResource($vacancy->load('company'));
+    }
+
+    public function destroy(Vacancy $vacancy)
+    {
+        $vacancy->delete();
+
+        return response()->noContent();
     }
 }
