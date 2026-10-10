@@ -50,3 +50,18 @@ export async function createVacancy(payload: Record<string, unknown>): Promise<V
   });
   return res.data;
 }
+
+export async function updateVacancy(
+  id: string | number,
+  payload: Record<string, unknown>
+): Promise<Vacancy> {
+  const res = await request<{ data: Vacancy }>(`/vacancies/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(payload),
+  });
+  return res.data;
+}
+
+export async function deleteVacancy(id: number): Promise<void> {
+  await request<null>(`/vacancies/${id}`, { method: "DELETE" });
+}

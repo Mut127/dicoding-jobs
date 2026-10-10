@@ -13,8 +13,8 @@ export default function Navbar() {
         <Link href="/" className="text-slate-700 hover:text-black">
           Lowongan Kerja
         </Link>
-        <Link href="/vacancies/new" className="text-slate-700 hover:text-black">
-          Buat Lowongan
+        <Link href="/dashboard" className="text-slate-700 hover:text-black">
+          Dashboard
         </Link>
       </nav>
     </header>
