@@ -24,3 +24,48 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.rich-text h2 {
+  margin: 0.75rem 0 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+.rich-text h3 {
+  margin: 0.75rem 0 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.rich-text p {
+  margin: 0.5rem 0;
+}
+.rich-text ul {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+.rich-text ol {
+  margin: 0.5rem 0;
+  padding-left: 1.25rem;
+  list-style: decimal;
+}
+.rich-text li > p {
+  margin: 0;
+}
+.rich-text a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+.rich-text code {
+  border-radius: 0.25rem;
+  background: #f3f4f6;
+  padding: 0.1rem 0.3rem;
+  font-size: 0.875em;
+}
+.rich-text img {
+  max-width: 100%;
+  height: auto;
+  margin: 0.5rem 0;
+}
+.rich-text > :first-child {
+  margin-top: 0;
+}

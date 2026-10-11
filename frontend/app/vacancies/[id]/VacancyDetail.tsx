@@ -7,6 +7,7 @@ import { ApiError, getVacancy } from "@/lib/api";
 import { employmentTypeLabels, experienceLabels } from "@/lib/format";
 import Image from "next/image";
 import { Building2, MapPin, Users } from "lucide-react";
+import DOMPurify from "dompurify";
 
 export default function VacancyDetail() {
   const { id } = useParams<{ id: string }>();
@@ -80,10 +81,12 @@ export default function VacancyDetail() {
           {employmentTypeLabels[vacancy.employment_type] ?? vacancy.employment_type}
         </span>
 
-        <h2 className="mt-6 font-semibold">Deskripsi Pekerjaan</h2>
-        <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-gray-700">
-          {vacancy.description}
-        </p>
+        <div
+          className="rich-text mt-6 whitespace-pre-line text-sm leading-relaxed text-gray-700"
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(vacancy.description),
+          }}
+        />
 
         <h2 className="mt-8 font-semibold">Informasi Tambahan</h2>
         <dl className="mt-3 grid grid-cols-2 gap-4 text-sm">

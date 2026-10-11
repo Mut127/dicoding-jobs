@@ -9,6 +9,7 @@ import VacancyForm, {
   type VacancyFormValues,
 } from "@/components/VacancyForm";
 import HeroPhoto from "@/components/HeroPhoto";
+import { toast } from "sonner";
 
 // Perusahaan default dari seeder (Dicoding Indonesia)
 const DEFAULT_COMPANY_ID = 1;
@@ -17,12 +18,16 @@ export default function NewVacancyPage() {
   const router = useRouter();
   const queryClient = useQueryClient();
 
-  const mutation = useMutation({
+   const mutation = useMutation({
     mutationFn: (values: VacancyFormValues) =>
       createVacancy({ company_id: DEFAULT_COMPANY_ID, ...formToPayload(values) }),
     onSuccess: (vacancy) => {
       queryClient.invalidateQueries({ queryKey: ["vacancies"] });
+      toast.success("Lowongan berhasil dibuat");
       router.push(`/vacancies/${vacancy.id}`);
+    },
+    onError: () => {
+      toast.error("Gagal membuat lowongan. Periksa kembali isian Anda.");
     },
   });
 
@@ -44,11 +49,12 @@ export default function NewVacancyPage() {
 
       <div className="mx-auto max-w-md px-6 py-10">
         <VacancyForm
-          initial={emptyForm}
-          submitLabel="Buat lowongan"
-          isPending={mutation.isPending}
-          error={mutation.error}
-          onSubmit={(values) => mutation.mutate(values)}
+        initial={emptyForm}
+        submitLabel="Buat lowongan"
+        isPending={mutation.isPending}
+        error={mutation.error}
+        onSubmit={(values) => mutation.mutate(values)}
+        requireSalary
         />
       </div>
     </>

@@ -6,6 +6,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Briefcase, Clock, Pencil, Trash2, Upload } from "lucide-react";
 import { deleteVacancy, getVacancies } from "@/lib/api";
 import { formatDate } from "@/lib/format";
+import { useState } from "react";
+import { toast } from "sonner";
+import ConfirmDialog from "@/components/ConfirmDialog";
 
 export default function DashboardPage() {
   const queryClient = useQueryClient();
@@ -14,17 +17,21 @@ export default function DashboardPage() {
     queryKey: ["vacancies", "dashboard"],
     queryFn: () => getVacancies(),
   });
+  
+  const [toDelete, setToDelete] = useState<{ id: number; title: string } | null>(null);
 
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteVacancy(id),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["vacancies"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["vacancies"] });
+      toast.success("Lowongan berhasil dihapus");
+      setToDelete(null);
+    },
+    onError: () => {
+      toast.error("Gagal menghapus lowongan");
+      setToDelete(null);
+    },
   });
-
-  const handleDelete = (id: number, title: string) => {
-    if (window.confirm(`Hapus lowongan "${title}"?`)) {
-      deleteMutation.mutate(id);
-    }
-  };
 
   return (
     <div className="mx-auto flex max-w-5xl gap-8 px-6 py-8">
@@ -97,7 +104,7 @@ export default function DashboardPage() {
                   </Link>
                   <button
                     type="button"
-                    onClick={() => handleDelete(vacancy.id, vacancy.title)}
+                    onClick={() => setToDelete({ id: vacancy.id, title: vacancy.title })}
                     disabled={deleteMutation.isPending}
                     className="flex items-center gap-1.5 rounded bg-red-100 px-3 py-1 text-xs text-red-700 hover:bg-red-200 disabled:opacity-60"
                   >
@@ -110,6 +117,16 @@ export default function DashboardPage() {
           ))}
         </div>
       </section>
+      <ConfirmDialog
+        open={toDelete !== null}
+        title="Hapus lowongan?"
+        message={`Lowongan "${toDelete?.title ?? ""}" akan dihapus dan tidak bisa dikembalikan.`}
+        confirmLabel="Ya, hapus"
+        cancelLabel="Batal"
+        isPending={deleteMutation.isPending}
+        onConfirm={() => toDelete && deleteMutation.mutate(toDelete.id)}
+        onCancel={() => setToDelete(null)}
+      />
     </div>
   );
 }

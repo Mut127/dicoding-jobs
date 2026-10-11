@@ -24,7 +24,7 @@ test.describe("Dicoding Jobs", () => {
         active_until: activeUntil,
         location: "Bandung",
         is_remote: false,
-        description: "Lowongan untuk pengujian end-to-end.",
+        description: "<h2>Deskripsi Pekerjaan</h2><p>Lowongan untuk pengujian end-to-end.</p>",
         salary_min: 5000000,
         salary_max: 8000000,
         show_salary: true,

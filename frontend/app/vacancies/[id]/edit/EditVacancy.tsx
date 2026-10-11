@@ -9,6 +9,7 @@ import VacancyForm, {
   vacancyToForm,
   type VacancyFormValues,
 } from "@/components/VacancyForm";
+import { toast } from "sonner";
 
 export default function EditVacancy() {
   const { id } = useParams<{ id: string }>();
@@ -30,7 +31,11 @@ export default function EditVacancy() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["vacancies"] });
       queryClient.invalidateQueries({ queryKey: ["vacancy", id] });
+      toast.success("Lowongan berhasil diperbarui");
       router.push("/dashboard");
+    },
+    onError: () => {
+      toast.error("Gagal menyimpan perubahan. Periksa kembali isian Anda.");
     },
   });
 

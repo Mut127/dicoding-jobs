@@ -32,6 +32,8 @@ Recruiters can create, edit, and delete vacancies, and job seekers can browse an
 - Create and edit vacancy forms (`/vacancies/new`, `/vacancies/[id]/edit`), sharing one reusable form component
 - Reusable `JobCard` component, styled with Tailwind CSS to follow the Figma design
 - Data fetching and caching with TanStack Query
+- Rich-text editor for the job description (Tiptap), rendered safely with DOMPurify
+- Toast notifications and a confirmation dialog before deleting a vacancy
 
 ## Project structure
 
@@ -44,8 +46,8 @@ dicoding-jobs/
 
 ## Prerequisites
 
-- PHP 8.3 or newer (required by Laravel 13) and Composer
-- MySQL 8 (or MariaDB). Laragon, XAMPP, or any local MySQL works
+- PHP 8.5 or newer (required by Laravel 13) and Composer
+- MySQL 8. Laragon, or any local MySQL works
 - Node.js 20.9 or newer and npm
 
 ## Setup and run
@@ -55,7 +57,7 @@ dicoding-jobs/
 ```bash
 cd backend
 composer install
-cp .env.example .env        # on Windows cmd: copy .env.example .env
+cp .env.example .env        
 php artisan key:generate
 ```
 
@@ -204,8 +206,50 @@ curl -X POST http://127.0.0.1:8000/api/vacancies \
 - **Default company for recruiters.** The task has no authentication requirement, so the create form uses the seeded company (id `1`) instead of a login flow.
 - **Salary visibility.** The API only returns salary values when `show_salary` is enabled, matching the "Tampilkan gaji" toggle in the design.
 - **Search in the backend.** The title filter is a query scope on the model, used by the list endpoint and covered by a unit test.
-- **Plain textarea for the description.** The Figma design shows a rich-text editor. A textarea keeps the scope small and avoids rendering raw HTML (XSS risk).
+- **Rich-text description.** The description uses a Tiptap editor (bold, italic, underline, headings, lists, links, images, inline code) and is stored as HTML. The frontend sanitizes it with DOMPurify before rendering to prevent XSS.
 - **Test-first workflow.** The API tests were written before the endpoints, then the endpoints were implemented until the tests passed.
+
+## Preview
+
+### Vacancy list
+Job seekers see the latest vacancies as reusable job cards.
+
+<img src="frontend/public/images/list.png" alt="Vacancy list page" width="800">
+
+### Search by title
+Typing in the search box filters vacancies by title (debounced, handled by the backend).
+
+<img src="frontend/public/images/search.png" alt="Search results page" width="800">
+
+### Vacancy detail
+Shows the company info, the rich-text description, and additional information.
+
+<img src="frontend/public/images/detail.png" alt="Vacancy detail page" width="800">
+
+### Recruiter dashboard
+Recruiters can create, edit, and delete their vacancies.
+
+<img src="frontend/public/images/dashboard.png" alt="Dashboard page" width="800">
+
+### Create vacancy form
+The form follows the Figma design, including a rich-text editor for the job description.
+
+<img src="frontend/public/images/create-form.png" alt="Create vacancy form" width="800">
+
+### Validation
+Create, Update, Delete Validation:
+
+<img src="frontend/public/images/create-val.png" alt="Form validation errors" width="800">
+<img src="frontend/public/images/edit-val.png" alt="Form validation errors" width="800">
+<img src="frontend/public/images/delete-val.png" alt="Form validation errors" width="800">
+
+All backend tests passing:
+
+<img src="frontend/public/images/backend-tests.png" alt="Backend test results" width="700">
+
+Playwright results:
+
+<img src="frontend/public/images/e2e-tests.png" alt="Playwright E2E test results" width="700">
 
 ## Author
 
